@@ -4,10 +4,18 @@ import uuid
 from typing import Annotated
 
 from fastapi import FastAPI, File, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from starlette.responses import FileResponse
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 class CourseRef(BaseModel):
@@ -21,6 +29,9 @@ class CourseRef(BaseModel):
     price: float | None
     image_id: str | None
     docs_ids: str | None
+    is_submitted: bool = False
+    times: list[str] | None
+    specialization: str | None
 
 
 class Course(CourseRef):
